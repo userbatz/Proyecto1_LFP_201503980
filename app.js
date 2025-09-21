@@ -23,11 +23,7 @@ function esc(s) {
   for (let i = 0; i < str.length; i++) {
     const ch = str[i];
     if (ch === "&") out += "&amp;";
-      const tbody = document.createElement('tbody');
-  for (let i=0;i<TokensPas.length;i++) {
-    const tr=document.createElement('tr');
-    const tk = TokensPas[i];
-    [i+1, tk.lexeme, tk.type, tk.line, tk.col].forEach(v=>{ const td=document.createElement('td'); td.textContent=String(v); tr.appendChild(td); });if (ch === "<") out += "&lt;";
+    else if (ch === "<") out += "&lt;";
     else if (ch === ">") out += "&gt;";
     else out += ch;
   }
