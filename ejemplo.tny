@@ -1,0 +1,43 @@
+TORNEO {
+  nombre: "Copa Mundial Universitaria",
+  equipos: 4,
+  sede: "Guatemala"
+}
+
+EQUIPOS {
+  equipo: "Leones FC" [ 
+    jugador: "Pedro Martínez" [posicion: "DELANTERO", numero: 9, edad: 22],
+    jugador: "Mario López" [posicion: "MEDIOCAMPO", numero: 7, edad: 21],
+    jugador: "Luis García" [posicion: "DEFENSA", numero: 4, edad: 23]
+  ],
+  equipo: "Águilas United" [
+    jugador: "Diego Ramírez" [posicion: "DELANTERO", numero: 10, edad: 23],
+    jugador: "Sofía Hernández" [posicion: "MEDIOCAMPO", numero: 8, edad: 21]
+  ],
+  equipo: "Cóndores FC" [
+    jugador: "Valeria Cruz" [posicion: "DELANTERO", numero: 11, edad: 22]
+  ],
+  equipo: "Tigres Academy" [
+    jugador: "Ana Gómez" [posicion: "DEFENSA", numero: 3, edad: 20]
+  ]
+}
+
+ELIMINACION {
+  cuartos: [
+    partido: "Leones FC" vs "Cóndores FC" [resultado: "3-1", goleadores: [
+      goleador: "Pedro Martínez" [minuto: 15],
+      goleador: "Pedro Martínez" [minuto: 45],
+      goleador: "Valeria Cruz" [minuto: 67],
+      goleador: "Mario López" [minuto: 34]
+    ]],
+    partido: "Águilas United" vs "Tigres Academy" [resultado: "2-0", goleadores: [
+      "Diego Ramírez", "Sofía Hernández"
+    ]]
+  ],
+  semifinal: [
+    partido: "Leones FC" vs "Águilas United" [resultado: "1-0", goleadores: ["Luis García"]]
+  ],
+  final: [
+    partido: "Leones FC" vs "TBD" [goleadores: []]
+  ]
+}

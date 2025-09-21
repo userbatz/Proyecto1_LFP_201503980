@@ -1,0 +1,44 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><title>Manual Técnico — TourneyJS</title>
+<style>body{font-family:system-ui,Segoe UI,Roboto;max-width:900px;margin:40px auto;line-height:1.45} pre{background:#f6f8fa;padding:12px;border-radius:8px;overflow:auto}</style>
+</head><body>
+<h1>Manual Técnico — TourneyJS</h1>
+<p>Este documento describe la arquitectura, el analizador léxico (AFD), los módulos de cálculo de reportes y los artefactos generados.</p>
+<h2>Arquitectura</h2>
+<ul>
+<li><b>UI</b>: <code>index.html</code> + <code>style.css</code></li>
+<li><b>Léxico</b>: clase <code>Lexer</code> (AFD manual, sin regex)</li>
+<li><b>Parser básico</b>: clase <code>Parser</code> (consumo de tokens para poblar el modelo)</li>
+<li><b>Reportes</b>: funciones para estadísticas, goleadores e info general; generación de DOT</li>
+</ul>
+<h2>AFD (grafo)</h2>
+<p>Se incluye <code>assets/afd.dot</code> con el autómata de tokenización (símbolos, palabras, números y cadenas).</p>
+<pre>digraph AFD {
+  rankdir=LR;
+  node [shape=circle];
+  INI -> WS    [label="espacios"];
+  INI -> SYM   [label="{ } [ ] : ,"];
+  INI -> CAD   [label="\""];
+  INI -> NUM   [label="0-9"];
+  INI -> ID    [label="letra/_"];
+  ID -> ID     [label="letra/_/0-9"];
+  NUM -> NUM   [label="0-9"];
+  CAD -> CAD   [label="cualquiera/escape"];
+  CAD -> ACEPT [label="\""];
+}</pre>
+<h2>Estados equivalentes y minimización</h2>
+<p>El diseño ya es compacto; para la práctica, la minimización no reduce estados adicionales por la separación de clases de equivalencia (letra/dígito/símbolo/espacio).</p>
+<h2>Restricciones cumplidas</h2>
+<ul>
+<li>Lenguaje: JavaScript</li>
+<li>Aplicación web</li>
+<li>AFD programado manualmente, procesando carácter por carácter</li>
+<li>Sin uso de RegExp ni librerías de análisis (Jison, ANTLR, etc.)</li>
+</ul>
+<h2>Algoritmos y cálculos</h2>
+<ul>
+<li><b>Tokens</b>: símbolo, cadena, número, reservada, identificador</li>
+<li><b>Errores</b>: caracteres no reconocidos, cadenas sin cerrar</li>
+<li><b>Estadísticas</b>: por equipo (J,G,P,GF,GC,GD), goleadores, general</li>
+<li><b>Bracket</b>: DOT conectando ganadores por orden (1-2 a semifinal 1, etc.)</li>
+</ul>
+</body></html>

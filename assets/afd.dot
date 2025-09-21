@@ -1,0 +1,25 @@
+digraph AFD {
+  rankdir=LR;
+  node [shape=circle, style=filled, fillcolor="#fff8e1"];
+  INI [shape=doublecircle, fillcolor="#ffe082"];
+  WS  [fillcolor="#fff176"];
+  SYM [fillcolor="#c8e6c9"];
+  CAD [fillcolor="#bbdefb"];
+  NUM [fillcolor="#ffe0b2"];
+  ID  [fillcolor="#d1c4e9"];
+  ACC [fillcolor="#cfd8dc"];
+
+  INI -> WS  [label="espacios"];
+  INI -> SYM [label="{ } [ ] : ,"];
+  INI -> CAD [label="\""];
+  INI -> NUM [label="0-9"];
+  INI -> ID  [label="letra/_"];
+
+  WS  -> WS  [label="esp/\n/\t"];
+  WS  -> INI [label="otro"];
+
+  ID  -> ID  [label="letra/_/0-9"];
+  NUM -> NUM [label="0-9"];
+  CAD -> CAD [label="cualquier / escape"];
+  CAD -> ACC [label="\""];
+}

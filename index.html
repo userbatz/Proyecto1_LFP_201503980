@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TourneyJS — Analizador Léxico de Torneos</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <header>
+    <h1>TourneyJS</h1>
+    <p>Analizador léxico (AFD manual) para gestionar torneos deportivos. Carga un archivo y presiona <b>Analizar</b>.</p>
+  </header>
+
+  <main>
+    <section class="panel">
+      <div class="flex">
+        <div class="col">
+          <label for="fileInput" class="btn">Cargar archivo</label>
+          <input id="fileInput" type="file" accept=".txt,.tny,.json,.data" style="display:none"/>
+        </div>
+        <div class="col grow">
+          <button id="analyzeBtn" class="btn primary">Analizar</button>
+          <button id="exportTokensBtn" class="btn">Exportar Tokens (HTML)</button>
+          <button id="exportErrorsBtn" class="btn">Exportar Errores (HTML)</button>
+          <button id="exportReportsBtn" class="btn">Exportar Reportes (HTML)</button>
+          <button id="downloadDotBtn" class="btn">Descargar DOT (Bracket)</button>
+        </div>
+      </div>
+
+      <textarea id="source" spellcheck="false" placeholder="Pega aquí el código del torneo o cárgalo desde un archivo..."></textarea>
+    </section>
+
+    <section class="panel">
+      <h2>Resultado del Análisis Léxico</h2>
+      <div class="grid-2">
+        <div>
+          <h3>Tokens</h3>
+          <table id="tokensTable"></table>
+        </div>
+        <div>
+          <h3>Errores Léxicos</h3>
+          <table id="errorsTable"></table>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Reportes</h2>
+      <div class="grid-2">
+        <div>
+          <h3>Bracket de Eliminación</h3>
+          <div id="bracketTable"></div>
+          <h4>DOT generado (Graphviz)</h4>
+          <pre id="dotPreview" class="code"></pre>
+        </div>
+        <div>
+          <h3>Estadísticas por Equipo</h3>
+          <div id="teamStats"></div>
+
+          <h3>Goleadores</h3>
+          <div id="scorers"></div>
+
+          <h3>Información General del Torneo</h3>
+          <div id="generalInfo"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <small>Proyecto educativo — LFP: AFD manual, sin regex ni parsers automáticos.</small>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
