@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TourneyJS — Analizador Léxico de Torneos</title>
-  <link rel="stylesheet" href="style.css"/>
+  <title>Proyecto 1 LFP</title>
+  <link rel="stylesheet" href="style.css"/> 
 </head>
 <body>
   <header>
-    <h1>TourneyJS</h1>
-    <p>Analizador léxico (AFD manual) para gestionar torneos deportivos. Carga un archivo y presiona <b>Analizar</b>.</p>
+    <h1>Proyecto 1 TorneyJS</h1>
+    <p>Analizador léxico AFD<b></b>.</p>
   </header>
 
   <main>
@@ -21,10 +21,10 @@
         </div>
         <div class="col grow">
           <button id="analyzeBtn" class="btn primary">Analizar</button>
-          <button id="exportTokensBtn" class="btn">Exportar Tokens (HTML)</button>
-          <button id="exportErrorsBtn" class="btn">Exportar Errores (HTML)</button>
-          <button id="exportReportsBtn" class="btn">Exportar Reportes (HTML)</button>
-          <button id="downloadDotBtn" class="btn">Descargar DOT (Bracket)</button>
+          <button id="exportTokensBtn" class="btn">Exportar Tokens EN HTML</button>
+          <button id="exportErrorsBtn" class="btn">Exportar Errores EN HTML</button>
+          <button id="exportReportsBtn" class="btn">Exportar Reportes EN HTML</button>
+          <button id="downloadDotBtn" class="btn">Descargar DOT</button>
         </div>
       </div>
 
@@ -32,7 +32,7 @@
     </section>
 
     <section class="panel">
-      <h2>Resultado del Análisis Léxico</h2>
+      <h2>Resultado del Análisis Léxico:</h2>
       <div class="grid-2">
         <div>
           <h3>Tokens</h3>
@@ -51,7 +51,7 @@
         <div>
           <h3>Bracket de Eliminación</h3>
           <div id="bracketTable"></div>
-          <h4>DOT generado (Graphviz)</h4>
+          <h4>(Graphviz)</h4>
           <pre id="dotPreview" class="code"></pre>
         </div>
         <div>
@@ -69,7 +69,7 @@
   </main>
 
   <footer>
-    <small>Proyecto educativo — LFP: AFD manual, sin regex ni parsers automáticos.</small>
+    <small>Gerson Ottoniel Batz Cocon -201503980- LFP</small>
   </footer>
 
   <script src="app.js"></script>

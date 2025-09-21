@@ -1,8 +1,8 @@
 
 //SECCION PRINCIPAL.
 
-// ---------------- Utilities ----------------
-function download(filename, text) {
+// COMENZAMOS CON LA PARTE DEL ANALISIS LEXICO Y SINTACTICO, PARA LUEGO PASAR A LA GENERACION DE REPORTES
+function descargar(filename, text) {
   const blob = new Blob([text], {type: "text/plain;charset=utf-8"});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
@@ -15,21 +15,27 @@ function download(filename, text) {
   }, 0);
 }
 
+
+//renderizando....
 function esc(s) {
-  // escape HTML sin usar RegExp (cumple restricción de no usar regex para nada del análisis)
   const str = String(s);
   let out = "";
   for (let i = 0; i < str.length; i++) {
     const ch = str[i];
     if (ch === "&") out += "&amp;";
-    else if (ch === "<") out += "&lt;";
+      const tbody = document.createElement('tbody');
+  for (let i=0;i<TokensPas.length;i++) {
+    const tr=document.createElement('tr');
+    const tk = TokensPas[i];
+    [i+1, tk.lexeme, tk.type, tk.line, tk.col].forEach(v=>{ const td=document.createElement('td'); td.textContent=String(v); tr.appendChild(td); });if (ch === "<") out += "&lt;";
     else if (ch === ">") out += "&gt;";
     else out += ch;
   }
   return out;
 }
 
-// ---------------- Lexer (AFD) ----------------
+//parte principal del analisis lexico y sintactico....
+//se puede mejorar mucho
 class Lexer {
   constructor() {
     this.source = "";
@@ -39,14 +45,16 @@ class Lexer {
     this.tokens = [];
     this.errors = [];
 
-    // Palabras reservadas del lenguaje definido
+
+
+    // Palabras que son especificas al buscar y leer el archivo.
     this.reserved = [
       "TORNEO", "EQUIPOS", "ELIMINACION",
       "equipo", "jugador", "jugadores",
       "posicion", "numero", "edad", "nombre", "sede",
       "fase", "cuartos", "semifinal", "final",
       "partido", "resultado", "goleador", "goleadores",
-      "vs", "minuto", "equipos" // 'equipos' atributo numérico dentro de TORNEO
+      "vs", "minuto", "equipos" //
     ];
   }
 
@@ -59,15 +67,26 @@ class Lexer {
     this.errors = [];
   }
 
+  // Verifica si hemos llegado al final del archivo de texto
   eof() { return this.i >= this.source.length; }
+  
+  // lee el caracter.
   peek() { return this.source[this.i] || ""; }
+  
+  // lee y avanza...
   next() {
+    // Obtiene el carácter actual y aumenta el índice en 1
     const ch = this.source[this.i++] || "";
+    
+    // Si encontramos un salto de línea, aumentamos el número de línea y reiniciamos la columna
     if (ch === "\n") {
       this.line++; this.col = 1;
     } else {
+      // Si no es salto de línea, solo aumentamos la columna
       this.col++;
     }
+    
+    // Retorna el carácter que acabamos de consumir
     return ch;
   }
 
@@ -164,6 +183,13 @@ class Lexer {
     return { tokens: this.tokens, errors: this.errors };
   }
 }
+
+
+
+
+
+
+
 
 // ---------------- Parser muy simple (sobre los tokens reconocidos) ----------------
 class Parser {
@@ -599,10 +625,10 @@ const scorersDiv = document.getElementById('scorers');
 const generalInfoDiv = document.getElementById('generalInfo');
 const dotPreview = document.getElementById('dotPreview');
 
-let lastTokens = [];
-let lastErrors = [];
-let lastModel = null;
-let lastReports = null;
+let TokensPas = [];
+let ErroresPas = [];
+let modeloPas = null;
+let ReportesPas = null;
 
 fileInput.addEventListener('change', (ev)=>{
   const f = ev.target.files[0];
@@ -616,7 +642,7 @@ analyzeBtn.addEventListener('click', ()=>{
   const lexer = new Lexer();
   lexer.setSource(src.value);
   const { tokens, errors } = lexer.scan();
-  lastTokens = tokens; lastErrors = errors;
+  TokensPas = tokens; ErroresPas = errors;
 
   // Render tokens
   tokensTable.innerHTML = "";
@@ -647,14 +673,19 @@ analyzeBtn.addEventListener('click', ()=>{
   }
   errorsTable.appendChild(eBody);
 
+
+
+
+
+
   // Si no hay errores léxicos, proceder a parsear y generar reportes
   bracketTable.innerHTML = ""; teamStatsDiv.innerHTML=""; scorersDiv.innerHTML=""; generalInfoDiv.innerHTML=""; dotPreview.textContent="";
-  lastModel = null; lastReports = null;
+  modeloPas = null; lastReports = null;
   if (errors.length === 0) {
     try {
       const parser = new Parser(tokens);
-      lastModel = parser.parseAll();
-      lastReports = computeReports(lastModel);
+      modeloPas = parser.parseAll();
+      lastReports = computeReports(modeloPas);
       buildTable(bracketTable, ['Fase','Partido','Resultado','Ganador'], lastReports.bracketRows);
       buildStatsTable(teamStatsDiv, lastReports.stats);
       buildScorersTable(scorersDiv, lastReports.scorersArr);
@@ -670,6 +701,9 @@ analyzeBtn.addEventListener('click', ()=>{
   }
 });
 
+
+
+
 exportTokensBtn.addEventListener('click', ()=>{
   let html = "<html><head><meta charset='utf-8'><title>Tokens</title></head><body><h1>Tokens</h1><table border='1' cellspacing='0' cellpadding='6'><tr><th>No.</th><th>Lexema</th><th>Tipo</th><th>Línea</th><th>Columna</th></tr>";
   for (let i=0;i<lastTokens.length;i++) {
@@ -677,8 +711,13 @@ exportTokensBtn.addEventListener('click', ()=>{
     html += `<tr><td>${i+1}</td><td>${esc(t.lexeme)}</td><td>${t.type}</td><td>${t.line}</td><td>${t.col}</td></tr>`;
   }
   html += "</table></body></html>";
-  download("tokens.html", html);
+  descargar("tokens.html", html);
 });
+
+
+
+
+
 
 exportErrorsBtn.addEventListener('click', ()=>{
   let html = "<html><head><meta charset='utf-8'><title>Errores Lexicos</title></head><body><h1>Errores Léxicos</h1><table border='1' cellspacing='0' cellpadding='6'><tr><th>No.</th><th>Descripción</th><th>Línea</th><th>Columna</th></tr>";
@@ -687,8 +726,12 @@ exportErrorsBtn.addEventListener('click', ()=>{
     html += `<tr><td>${i+1}</td><td>${esc(e.desc)}</td><td>${e.line}</td><td>${e.col}</td></tr>`;
   }
   html += "</table></body></html>";
-  download("errores.html", html);
+  descargar("errores.html", html);
 });
+
+
+
+
 
 exportReportsBtn.addEventListener('click', ()=>{
   if (!lastReports) { alert("Primero ejecuta el análisis sin errores."); return; }
@@ -727,15 +770,15 @@ exportReportsBtn.addEventListener('click', ()=>{
 
   html += "<h1>DOT (Graphviz)</h1><pre>"+esc(lastReports.dot)+"</pre>";
   html += "</body></html>";
-  download("reportes.html", html);
+  descargar("reportes.html", html);
 });
 
 downloadDotBtn.addEventListener('click', ()=>{
   if (!lastReports) { alert("Primero ejecuta el análisis sin errores."); return; }
-  download("bracket.dot", lastReports.dot);
+  descargar("bracket.dot", lastReports.dot);
 });
 
-// ---------------- Ejemplo de entrada precargado ----------------
+// ---------------- PROBANDO EJEMPLO PARA INGRESO INICIAL----------------
 const ejemplo = `TORNEO {
   nombre: "Copa Mundial Universitaria",
   equipos: 4,
